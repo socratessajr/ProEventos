@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProEventos.API.Data;
 using ProEventos.WebAPI.Models;
 
 namespace ProEventos.API.Controllers
@@ -12,64 +13,22 @@ namespace ProEventos.API.Controllers
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
-        private readonly ILogger<EventoController> _logger;
-
-        public EventoController(ILogger<EventoController> logger)
+        private readonly DataContext _context;
+        public EventoController(DataContext context)
         {
+            this._context = context;
         }
 
         [HttpGet]
         public IEnumerable<Evento> Get()
         {
-            return new Evento[] {
-                new Evento
-                {
-                    EventoId = 1,
-                    Tema = "Angular 11",
-                    Local = "BH",
-                    DataEvento = "25/10/2021",
-                    QtdPessoas = 250,
-                    Lote = "1º Lote",
-                    ImagemURL = "foto1.jpg"
-                },
-                new Evento
-                {
-                    EventoId = 2,
-                    Tema = "Angular 11 e .NET Core 5",
-                    Local = "SP",
-                    DataEvento = "25/10/2021",
-                    QtdPessoas = 250,
-                    Lote = "1º Lote",
-                    ImagemURL = "foto2.jpg"
-                }
-            };
+            return _context.Eventos;
         }
 
         [HttpGet("{id}")]
         public Evento GetById(int id)
         {
-            return new Evento[] {
-                new Evento
-                {
-                    EventoId = 1,
-                    Tema = "Angular 11",
-                    Local = "BH",
-                    DataEvento = "25/10/2021",
-                    QtdPessoas = 250,
-                    Lote = "1º Lote",
-                    ImagemURL = "foto1.jpg"
-                },
-                new Evento
-                {
-                    EventoId = 2,
-                    Tema = "Angular 11 e .NET Core 5",
-                    Local = "SP",
-                    DataEvento = "25/10/2021",
-                    QtdPessoas = 250,
-                    Lote = "1º Lote",
-                    ImagemURL = "foto2.jpg"
-                }
-            }.Where(e => e.EventoId == id).FirstOrDefault();
+            return _context.Eventos.FirstOrDefault(e => e.EventoId == id);
         }
 
         [HttpPost]
